@@ -1,0 +1,55 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: tracex-db
+    environment:
+      POSTGRES_USER: tracex
+      POSTGRES_PASSWORD: tracex_dev_pass
+      POSTGRES_DB: tracex
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tracex -d tracex"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: tracex-api
+    environment:
+      - APP_ENV=development
+      - DEMO_MODE=true
+      - DATA_ADAPTER=mock
+      - DATABASE_URL=postgresql+asyncpg://tracex:tracex_dev_pass@db:5432/tracex
+      - ALLOW_SYNTHETIC_LABELS=true
+      - LOG_LEVEL=INFO
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: tracex-frontend
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8000/api/v1
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - api
+
+volumes:
+  pgdata:

@@ -1,0 +1,40 @@
+{
+  "fixture_id": "01_direct_exchange_deposit",
+  "description": "Victim reports suspect address sending funds directly to a known exchange deposit address.",
+  "is_synthetic": true,
+  "chain": "ethereum",
+  "reported_address": "0x71C84102F0B9C9b47b95c3C8F27B8A049B64B171",
+  "reported_tx_hash": "0x4a5d3f2a1b9c8e7d6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e",
+  "incident_date": "2026-03-15T12:00:00Z",
+  "reported_amount": "5.0",
+  "reported_asset": "ETH",
+  "transfers": [
+    {
+      "tx_hash": "0x4a5d3f2a1b9c8e7d6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e",
+      "log_index": -1,
+      "transfer_kind": "native",
+      "block_number": 19450120,
+      "block_timestamp": "2026-03-15T12:05:00Z",
+      "sender": "0x71C84102F0B9C9b47b95c3C8F27B8A049B64B171",
+      "receiver": "0x28C6c06298d514Db089934071355E5743bf21d60",
+      "asset_id": "native",
+      "asset_symbol": "ETH",
+      "asset_decimals": 18,
+      "amount_raw": "5000000000000000000",
+      "amount_decimal": "5.0",
+      "status": "success"
+    }
+  ],
+  "labels": [
+    {
+      "address": "0x28C6c06298d514Db089934071355E5743bf21d60",
+      "entity_name": "Binance",
+      "entity_type": "exchange_deposit_address",
+      "source_name": "Etherscan Public Labels",
+      "source_type": "reputable_secondary",
+      "source_reference": "https://etherscan.io/accounts/label/binance",
+      "verification_level": "level_2_reputable_secondary",
+      "is_shared_infrastructure": true
+    }
+  ]
+}

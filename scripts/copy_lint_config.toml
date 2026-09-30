@@ -1,0 +1,24 @@
+[prohibited_phrases]
+phrases = [
+    "criminal exchange",
+    "fraudulent exchange",
+    "scam wallet confirmed",
+    "guilty",
+    "proof of fraud",
+    "fraud score",
+    "risk percentage",
+    "definitely",
+    "confirmed scammer",
+    "the exchange is responsible"
+]
+
+[exclusions]
+paths = [
+    ".agent/rules/trace-x.md",
+    "AGENTS.md",
+    "scripts/lint_copy.py",
+    "scripts/copy_lint_config.toml",
+    "docs/copy-deck.md",
+    "backend/tests/unit/test_copy_lint.py",
+    "frontend/tests/copy.test.ts"
+]

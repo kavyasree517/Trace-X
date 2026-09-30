@@ -1,0 +1,13 @@
+{
+  "fixture_id": "12_no_outgoing_transfers",
+  "description": "Suspect address has no outgoing transactions recorded on-chain during the window.",
+  "is_synthetic": true,
+  "chain": "ethereum",
+  "reported_address": "0x000000000000000000000000000000000000dEaD",
+  "reported_tx_hash": null,
+  "incident_date": "2026-03-20T10:00:00Z",
+  "reported_amount": "1000.0",
+  "reported_asset": "USDT",
+  "transfers": [],
+  "labels": []
+}

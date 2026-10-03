@@ -15,9 +15,7 @@ class SignalItem(BaseModel):
     evidence_tag: EvidenceTag = EvidenceTag.INFERRED
     feature_values: dict[str, Any] = Field(default_factory=dict)
     explanation: str
-    limitation_note: str = Field(
-        default="This pattern can also result from legitimate activity."
-    )
+    limitation_note: str = Field(default="This pattern can also result from legitimate activity.")
 
 
 class SignalResponse(BaseModel):

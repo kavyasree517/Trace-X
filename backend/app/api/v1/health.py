@@ -50,12 +50,12 @@ async def check_readiness(
     db_status = "connected"
     try:
         await db.execute(text("SELECT 1"))
-    except Exception:
+    except Exception as exc:
         db_status = "unavailable"
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Database is currently unavailable",
-        )
+        ) from exc
 
     return ReadinessResponse(
         status="ready",

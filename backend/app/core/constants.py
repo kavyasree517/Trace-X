@@ -34,9 +34,7 @@ DEMO_NOTICE: Final[str] = (
     "and does not describe a real investigation."
 )
 
-SIGNAL_LIMITATION_NOTE: Final[str] = (
-    "This pattern can also result from legitimate activity."
-)
+SIGNAL_LIMITATION_NOTE: Final[str] = "This pattern can also result from legitimate activity."
 
 RELATED_REPORT_CAUTION: Final[str] = (
     "These cases share the on-chain evidence shown below. "

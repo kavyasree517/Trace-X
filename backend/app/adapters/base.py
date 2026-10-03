@@ -2,7 +2,7 @@
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 from decimal import Decimal
 
 from app.core.enums import EvidenceTag, TransferKind
@@ -32,6 +32,15 @@ class NormalizedTransfer:
     is_self_transfer: bool = False
     evidence_tag: EvidenceTag = EvidenceTag.OBSERVED
 
+    @property
+    def edge_key(self) -> tuple[str, int]:
+        """Return the graph edge key mandated by the engine."""
+        return (self.tx_hash, self.log_index)
+
+    @property
+    def is_success(self) -> bool:
+        return self.status == "success"
+
 
 @dataclass
 class AdapterResult:
@@ -39,7 +48,7 @@ class AdapterResult:
 
     items: list[NormalizedTransfer] = field(default_factory=list)
     source_name: str = "unknown"
-    retrieved_at: datetime = field(default_factory=datetime.utcnow)
+    retrieved_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     request_count: int = 1
     truncated: bool = False
     warnings: list[str] = field(default_factory=list)

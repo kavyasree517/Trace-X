@@ -1,8 +1,6 @@
 """Graph topology visualization schemas."""
 
-from typing import Any
-
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 from app.core.enums import EvidenceTag
 

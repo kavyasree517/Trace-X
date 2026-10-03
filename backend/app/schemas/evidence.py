@@ -1,9 +1,8 @@
 """Case evidence package and forensic audit schemas."""
 
 from datetime import datetime
-from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 from app.schemas.attribution import AttributionItem
 from app.schemas.behavior import SignalItem

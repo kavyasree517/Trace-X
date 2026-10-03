@@ -1,9 +1,8 @@
 """Attribution schemas conforming to P7 provenance requirements."""
 
 from datetime import date
-from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 from app.core.enums import (
     AttributionConfidenceLevel,

@@ -5,10 +5,10 @@ from datetime import date, datetime
 from typing import Any
 
 from sqlalchemy import Boolean, Date, DateTime, ForeignKey, String, UniqueConstraint
-from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.models.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
+from app.models.types import JSONType, UUIDType
 
 
 class EntityLabel(Base, UUIDPrimaryKeyMixin, TimestampMixin):
@@ -39,10 +39,10 @@ class LabelChangeLog(Base, UUIDPrimaryKeyMixin):
     __tablename__ = "label_change_log"
 
     label_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("entity_labels.id", ondelete="CASCADE"), nullable=False
+        UUIDType, ForeignKey("entity_labels.id", ondelete="CASCADE"), nullable=False
     )
     change_type: Mapped[str] = mapped_column(String(32), nullable=False)
     changed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     changed_by: Mapped[str] = mapped_column(String(128), nullable=False)
-    previous_value: Mapped[dict[str, Any] | None] = mapped_column(JSONB, nullable=True)
-    new_value: Mapped[dict[str, Any] | None] = mapped_column(JSONB, nullable=True)
+    previous_value: Mapped[dict[str, Any] | None] = mapped_column(JSONType, nullable=True)
+    new_value: Mapped[dict[str, Any] | None] = mapped_column(JSONType, nullable=True)

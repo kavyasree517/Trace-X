@@ -2,6 +2,7 @@
 
 import logging
 import sys
+from collections.abc import MutableMapping
 from typing import Any
 
 import structlog
@@ -18,11 +19,11 @@ SENSITIVE_FIELD_NAMES = {
 
 
 def censor_sensitive_data(
-    logger: Any, method_name: str, event_dict: dict[str, Any]
-) -> dict[str, Any]:
+    logger: Any, method_name: str, event_dict: MutableMapping[str, Any]
+) -> MutableMapping[str, Any]:
     """Censor sensitive field values from structured log events."""
     for key in list(event_dict.keys()):
-        lower_key = key.lower()
+        lower_key = str(key).lower()
         if any(s in lower_key for s in SENSITIVE_FIELD_NAMES):
             event_dict[key] = "[REDACTED]"
     return event_dict
@@ -32,12 +33,14 @@ def setup_logging(log_level: str = "INFO") -> None:
     """Configure structured logging for standard library and structlog."""
     level = getattr(logging, log_level.upper(), logging.INFO)
 
+    censor_processor: structlog.types.Processor = censor_sensitive_data
+
     shared_processors: list[structlog.types.Processor] = [
         structlog.contextvars.merge_contextvars,
         structlog.stdlib.add_logger_name,
         structlog.stdlib.add_log_level,
         structlog.processors.TimeStamper(fmt="iso", utc=True),
-        censor_sensitive_data,
+        censor_processor,
         structlog.processors.StackInfoRenderer(),
         structlog.processors.format_exc_info,
     ]
@@ -66,6 +69,6 @@ def setup_logging(log_level: str = "INFO") -> None:
     root_logger.setLevel(level)
 
 
-def get_logger(name: str) -> structlog.stdlib.BoundLogger:
+def get_logger(name: str) -> Any:
     """Obtain a structured logger bound with component name."""
     return structlog.get_logger(name)

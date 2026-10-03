@@ -62,9 +62,31 @@ class Settings(BaseSettings):
     GRAPH_HIGH_DEGREE_THRESHOLD: int = 200
     GRAPH_MIN_TRANSFER_VALUE_USD_EQUIVALENT: float = 0.0
     GRAPH_VALUE_TRACING_METHOD: str = "proportional"
+    GRAPH_INCOMING_EXPANSION_DEFAULT: bool = False
+    GRAPH_DEADLINE_SECONDS: int = 90
+    GRAPH_MIN_CONTINUITY_RATIO: float = 0.05
+    GRAPH_MAX_PATHS_RETURNED: int = 25
+
+    # Path ranking weights. Ordering only. Never shown as a probability.
+    RANKING_WEIGHT_ANCHORED_TX: int = 40
+    RANKING_WEIGHT_CONTINUITY: int = 25
+    RANKING_WEIGHT_TIME_PROXIMITY: int = 20
+    RANKING_WEIGHT_HOP_COUNT: int = 10
+    RANKING_WEIGHT_TERMINAL_LABELLED: int = 5
 
     # Attribution thresholds
     LABEL_STALE_AFTER_DAYS: int = 365
+
+    # Behavioral rule thresholds. Rationale recorded in docs/behavioral-signals.md.
+    BEHAVIOR_RAPID_PASS_THROUGH_SECONDS: int = 3600
+    BEHAVIOR_SPLIT_OUT_DEGREE: int = 3
+    BEHAVIOR_MERGE_IN_DEGREE: int = 3
+    BEHAVIOR_SPLIT_INTERVAL_SECONDS: int = 86400
+    BEHAVIOR_EQUAL_VALUE_TOLERANCE: float = 0.001
+    BEHAVIOR_EQUAL_VALUE_MIN_REPEATS: int = 3
+    BEHAVIOR_PEEL_CHAIN_MAX_DEPTH: int = 4
+    BEHAVIOR_BURST_WINDOW_SECONDS: int = 3600
+    BEHAVIOR_ACTIVITY_WINDOW_SECONDS: int = 86400
 
     # Corroboration thresholds
     CORROBORATION_MIN_SHARED_PATH_LENGTH: int = 2
@@ -73,11 +95,22 @@ class Settings(BaseSettings):
 
     # Rate limiting and request limits
     RATE_LIMIT_CASES_PER_MINUTE_PER_IP: int = 10
+    RATE_LIMIT_REFRESH_PER_HOUR_PER_CASE: int = 3
+    RATE_LIMIT_LABELS_PER_MINUTE_PER_IP: int = 30
+    MAX_CONCURRENT_ANALYSES: int = 4
+    IDEMPOTENCY_WINDOW_SECONDS: int = 60
     REQUEST_MAX_BODY_BYTES: int = 16384
 
     # Retention windows in days
     REPORT_RETENTION_DAYS: int = 90
     CASE_RETENTION_DAYS: int = 180
+
+    # Analysis behaviour
+    SYNC_ANALYSIS_IN_TEST_MODE: bool = True
+    EXPLORER_MAX_ITEMS_PER_ADDRESS: int = 10000
+    EXPLORER_FINALITY_BLOCKS: int = 64
+    LABEL_REGISTRY_DIR: str = "data/label_registry"
+    FIXTURES_DIR: str = "data/fixtures"
 
     # Internal secrets and roles
     APP_SECRET_KEY: str = "dev_secret_key_change_in_production_min32chars!"

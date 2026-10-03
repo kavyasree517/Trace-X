@@ -3,10 +3,10 @@
 import hashlib
 import os
 import secrets
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-from eth_utils import is_address, to_checksum_address
+from eth_utils.address import is_address, to_checksum_address
 
 from app.core.config import get_settings
 
@@ -21,7 +21,7 @@ def canonicalize_address(address: str) -> str:
 
 def generate_case_reference(counter: int) -> str:
     """Generate a standard case reference formatted as TX-YYYY-NNNNNN."""
-    year = datetime.now(timezone.utc).year
+    year = datetime.now(UTC).year
     return f"TX-{year}-{counter:06d}"
 
 

@@ -18,14 +18,14 @@ Novelty statement: The contribution is an integrated, victim-report-conditioned,
 ## Claims to avoid
 
 The following claims are strictly out of scope and prohibited across all documentation, code comments, and interfaces:
-1. Detection of every fraudulent exchange.
-2. Any claim that a transfer to an exchange proves involvement.
-3. Definitive fraud verdicts or automated guilt determinations.
-4. Claims that no existing platform performs graph tracing or attribution.
-5. High accuracy claims prior to standardized benchmark evaluation.
-6. Claims of complete traceability across mixers, cross-chain bridges, or privacy networks.
-7. Designating any person or organization as criminal based on algorithmic output.
-8. Replacing law enforcement investigations, compliance obligations, or formal legal processes.
+1. Detection of every fraudulent exchange. <!-- copy-lint: allow -->
+2. Any claim that a transfer to an exchange proves involvement. <!-- copy-lint: allow -->
+3. Definitive fraud verdicts or automated guilt determinations. <!-- copy-lint: allow -->
+4. Claims that no existing platform performs graph tracing or attribution. <!-- copy-lint: allow -->
+5. High accuracy claims prior to standardized benchmark evaluation. <!-- copy-lint: allow -->
+6. Claims of complete traceability across mixers, cross-chain bridges, or privacy networks. <!-- copy-lint: allow -->
+7. Designating any person or organization as criminal based on algorithmic output. <!-- copy-lint: allow -->
+8. Replacing law enforcement investigations, compliance obligations, or formal legal processes. <!-- copy-lint: allow -->
 
 ## Quick start
 

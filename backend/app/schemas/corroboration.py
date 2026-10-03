@@ -1,7 +1,5 @@
 """Cross-report corroboration schemas."""
 
-from typing import Any
-
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.core.enums import CorroborationStrength, EvidenceTag

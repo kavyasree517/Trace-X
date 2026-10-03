@@ -6,14 +6,14 @@ build-backend = "setuptools.build_meta"
 name = "tracex-backend"
 version = "0.1.0"
 description = "Trust-aware Risk Analysis and Connection Evidence for Cryptocurrency Exchanges"
-readme = "../README.md"
+readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.110.0",
     "uvicorn[standard]>=0.28.0",
     "pydantic>=2.6.4",
     "pydantic-settings>=2.2.1",
-    "sqlalchemy>=2.0.28",
+    "sqlalchemy[asyncio]>=2.0.28",
     "alembic>=1.13.1",
     "asyncpg>=0.29.0",
     "aiosqlite>=0.20.0",
@@ -28,6 +28,7 @@ dependencies = [
     "structlog>=24.1.0",
     "slowapi>=0.1.9",
     "eth-utils>=4.0.0",
+    "eth-hash[pycryptodome]>=0.6.0",
     "cryptography>=42.0.5",
 ]
 
@@ -64,6 +65,7 @@ select = [
 ]
 ignore = [
     "B008", # Do not perform function calls in argument defaults (FastAPI Depends)
+    "UP042", # str+Enum kept for Pydantic v2 serialization compatibility
 ]
 
 [tool.mypy]
@@ -78,21 +80,35 @@ warn_redundant_casts = true
 warn_unused_ignores = true
 warn_return_any = true
 show_error_codes = true
+follow_imports_for_stubs = true
+explicit_package_bases = true
+namespace_packages = true
+mypy_path = "typings"
+exclude = ['^\.venv/']
+
+[[tool.mypy.overrides]]
+module = ["deprecated.*"]
+follow_imports = "skip"
+ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = [
-    "networkx.*",
     "eth_utils.*",
     "slowapi.*",
     "reportlab.*",
     "joblib.*",
     "sklearn.*",
+    "deprecated.*",
+    "pandas.*",
+    "numpy.*",
+    "alembic.*",
 ]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 minversion = "8.0"
 addopts = "-ra -q --strict-markers"
+markers = ["integration: marks tests as integration tests (deselect with '-m \"not integration\"')"]
 testpaths = ["tests"]
 asyncio_mode = "auto"
 filterwarnings = [

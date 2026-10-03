@@ -1,7 +1,7 @@
 """Mock blockchain data adapter loading deterministic JSON fixtures."""
 
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from decimal import Decimal
 from pathlib import Path
 from typing import Any
@@ -17,9 +17,7 @@ class MockDataAdapter(ChainDataAdapter):
     def __init__(self, fixtures_dir: Path | None = None) -> None:
         if fixtures_dir is None:
             # Default to backend/data/fixtures
-            self.fixtures_dir = (
-                Path(__file__).resolve().parent.parent.parent / "data" / "fixtures"
-            )
+            self.fixtures_dir = Path(__file__).resolve().parent.parent.parent / "data" / "fixtures"
         else:
             self.fixtures_dir = fixtures_dir
         self._fixtures: dict[str, dict[str, Any]] = {}
@@ -48,7 +46,7 @@ class MockDataAdapter(ChainDataAdapter):
         dec_amt = Decimal(item["amount_decimal"]) if item.get("amount_decimal") else None
         ts = datetime.fromisoformat(item["block_timestamp"].replace("Z", "+00:00"))
         if ts.tzinfo is None:
-            ts = ts.replace(tzinfo=timezone.utc)
+            ts = ts.replace(tzinfo=UTC)
 
         sender = canonicalize_address(item["sender"])
         receiver = canonicalize_address(item["receiver"])
@@ -69,7 +67,7 @@ class MockDataAdapter(ChainDataAdapter):
             amount_decimal=dec_amt,
             status=item.get("status", "success"),
             source="mock_fixture",
-            retrieved_at=datetime.now(timezone.utc),
+            retrieved_at=datetime.now(UTC),
             is_contract_creation=item.get("is_contract_creation", False),
             is_self_transfer=(sender == receiver),
             evidence_tag=EvidenceTag.OBSERVED,
@@ -99,7 +97,7 @@ class MockDataAdapter(ChainDataAdapter):
         return AdapterResult(
             items=matched_transfers,
             source_name="mock_fixture",
-            retrieved_at=datetime.now(timezone.utc),
+            retrieved_at=datetime.now(UTC),
             request_count=1,
             truncated=False,
         )
@@ -113,7 +111,7 @@ class MockDataAdapter(ChainDataAdapter):
         return AdapterResult(
             items=[],
             source_name="mock_fixture",
-            retrieved_at=datetime.now(timezone.utc),
+            retrieved_at=datetime.now(UTC),
             request_count=1,
             truncated=False,
         )
@@ -143,7 +141,7 @@ class MockDataAdapter(ChainDataAdapter):
         return AdapterResult(
             items=matched_transfers,
             source_name="mock_fixture",
-            retrieved_at=datetime.now(timezone.utc),
+            retrieved_at=datetime.now(UTC),
             request_count=1,
             truncated=False,
         )

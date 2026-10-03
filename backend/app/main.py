@@ -7,7 +7,6 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, Response
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 
@@ -72,7 +71,9 @@ def create_app() -> FastAPI:
 
     app = FastAPI(
         title="TRACE-X API",
-        description="Trust-aware Risk Analysis and Connection Evidence for Cryptocurrency Exchanges",
+        description=(
+            "Trust-aware Risk Analysis and Connection Evidence for Cryptocurrency Exchanges"
+        ),
         version=settings.APP_VERSION,
         lifespan=lifespan,
         docs_url="/docs" if settings.APP_ENV != "production" else None,

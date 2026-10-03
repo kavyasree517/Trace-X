@@ -25,6 +25,10 @@ wheels/
 htmlcov/
 .mypy_cache/
 .ruff_cache/
+.venv/
+venv/
+data/models/*.joblib
+data/models/*.pkl
 
 # Node
 node_modules/

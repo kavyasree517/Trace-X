@@ -16,9 +16,12 @@ phrases = [
 paths = [
     ".agent/rules/trace-x.md",
     "AGENTS.md",
+    "CONTINUE_HERE.md",
+    "docs/master-prompt.md",
     "scripts/lint_copy.py",
     "scripts/copy_lint_config.toml",
     "docs/copy-deck.md",
     "backend/tests/unit/test_copy_lint.py",
+    "backend/tests/unit/test_attribution.py",
     "frontend/tests/copy.test.ts"
 ]

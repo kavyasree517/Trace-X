@@ -27,7 +27,7 @@ class CaseCreateRequest(BaseModel):
     tx_hash: str | None = None
     incident_date: datetime | None = None
     incident_date_precision: IncidentDatePrecision = IncidentDatePrecision.UNKNOWN
-    reported_amount: Decimal | None = Field(default=None, ge=Decimal("0.0"))
+    reported_amount: Decimal | None = Field(default=None, ge=0.0)
     reported_asset: str | None = None
     parameters: CaseParameters = Field(default_factory=CaseParameters)
     narrative: str | None = Field(default=None, max_length=4000)

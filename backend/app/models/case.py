@@ -6,10 +6,10 @@ from decimal import Decimal
 from typing import Any
 
 from sqlalchemy import Boolean, DateTime, ForeignKey, Numeric, String
-from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
+from app.models.types import JSONType
 
 
 class Case(Base, UUIDPrimaryKeyMixin, TimestampMixin):
@@ -21,17 +21,23 @@ class Case(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     reported_address: Mapped[str] = mapped_column(String(128), index=True, nullable=False)
     reported_tx_hash: Mapped[str | None] = mapped_column(String(128), nullable=True)
     incident_date: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
-    incident_date_precision: Mapped[str] = mapped_column(String(32), default="unknown", nullable=False)
+    incident_date_precision: Mapped[str] = mapped_column(
+        String(32), default="unknown", nullable=False
+    )
     reported_amount: Mapped[Decimal | None] = mapped_column(Numeric(38, 18), nullable=True)
     reported_asset: Mapped[str | None] = mapped_column(String(32), nullable=True)
     status: Mapped[str] = mapped_column(String(32), default="pending", nullable=False)
-    parameters: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict, nullable=False)
+    parameters: Mapped[dict[str, Any]] = mapped_column(JSONType, default=dict, nullable=False)
     data_snapshot_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
     code_version: Mapped[str] = mapped_column(String(32), default="0.1.0", nullable=False)
     model_version: Mapped[str] = mapped_column(String(32), default="0.1.0", nullable=False)
     is_demo: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
-    analysis_started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
-    analysis_completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    analysis_started_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    analysis_completed_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
     failure_reason: Mapped[str | None] = mapped_column(String(512), nullable=True)
 
     private_details: Mapped["CasePrivateDetails | None"] = relationship(

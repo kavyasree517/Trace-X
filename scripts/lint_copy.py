@@ -1,4 +1,10 @@
-"""Copy lint script to detect prohibited phrases across the repository."""
+"""Copy lint script to detect prohibited phrases across the repository.
+
+A line may opt out with an inline ``copy-lint: allow`` marker when it has to
+quote a prohibited phrase in order to prohibit it, for example inside the
+README claims-to-avoid list. The marker is an HTML comment in Markdown so it
+does not render.
+"""
 
 from __future__ import annotations
 
@@ -11,13 +17,18 @@ except ModuleNotFoundError:
     import tomli as tomllib  # type: ignore[no-redef]
 
 
-def run_copy_lint() -> int:
-    root_dir = Path(__file__).resolve().parent.parent
+ALLOW_MARKER = "copy-lint: allow"
+
+
+def find_violations(root_dir: Path) -> list[tuple[str, int, str]]:
+    """Return every prohibited phrase occurrence under ``root_dir``.
+
+    Each violation is a ``(relative_path, line_number, phrase)`` tuple.
+    """
     config_path = root_dir / "scripts" / "copy_lint_config.toml"
 
     if not config_path.exists():
-        sys.stderr.write("Configuration file copy_lint_config.toml not found\n")
-        return 1
+        raise FileNotFoundError("Configuration file copy_lint_config.toml not found")
 
     with config_path.open("rb") as f:
         config = tomllib.load(f)
@@ -25,13 +36,24 @@ def run_copy_lint() -> int:
     prohibited = [p.lower() for p in config.get("prohibited_phrases", {}).get("phrases", [])]
     excluded_paths = [Path(p) for p in config.get("exclusions", {}).get("paths", [])]
 
-    # Normalize exclusions relative to root
     excluded_set = {str((root_dir / p).resolve()).lower() for p in excluded_paths}
 
     violations: list[tuple[str, int, str]] = []
 
     target_extensions = {".py", ".ts", ".tsx", ".html", ".md", ".json", ".txt"}
-    ignored_dirs = {".git", ".mypy_cache", ".ruff_cache", "node_modules", "dist", ".pytest_cache", "pgdata"}
+    ignored_dirs = {
+        ".git",
+        ".mypy_cache",
+        ".ruff_cache",
+        ".pytest_cache",
+        "node_modules",
+        "dist",
+        "build",
+        "pgdata",
+        ".venv",
+        "venv",
+        "site-packages",
+    }
 
     for path in root_dir.rglob("*"):
         if not path.is_file():
@@ -48,13 +70,26 @@ def run_copy_lint() -> int:
         except OSError:
             continue
 
-        lines = content.splitlines()
-        for idx, line in enumerate(lines, start=1):
+        for idx, line in enumerate(content.splitlines(), start=1):
+            if ALLOW_MARKER in line:
+                continue
             lower_line = line.lower()
             for phrase in prohibited:
                 if phrase in lower_line:
-                    rel_path = path.relative_to(root_dir).as_posix()
-                    violations.append((rel_path, idx, phrase))
+                    violations.append((path.relative_to(root_dir).as_posix(), idx, phrase))
+
+    return violations
+
+
+def run_copy_lint() -> int:
+    """Lint the real repository and report the result."""
+    root_dir = Path(__file__).resolve().parent.parent
+
+    try:
+        violations = find_violations(root_dir)
+    except FileNotFoundError as exc:
+        sys.stderr.write(f"{exc}\n")
+        return 1
 
     if violations:
         sys.stderr.write(f"Copy lint failed with {len(violations)} prohibited phrase occurrence(s):\n")

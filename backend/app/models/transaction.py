@@ -5,10 +5,10 @@ from datetime import datetime
 from decimal import Decimal
 
 from sqlalchemy import DateTime, ForeignKey, Index, Integer, Numeric, String, UniqueConstraint
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.models.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
+from app.models.types import UUIDType
 
 
 class Transaction(Base, UUIDPrimaryKeyMixin, TimestampMixin):
@@ -33,8 +33,14 @@ class Transaction(Base, UUIDPrimaryKeyMixin, TimestampMixin):
 
     __table_args__ = (
         UniqueConstraint(
-            "chain", "tx_hash", "log_index", "transfer_kind", "sender", "receiver", "asset_id",
-            name="uq_transactions_event"
+            "chain",
+            "tx_hash",
+            "log_index",
+            "transfer_kind",
+            "sender",
+            "receiver",
+            "asset_id",
+            name="uq_transactions_event",
         ),
         Index("ix_transactions_sender_time", "sender", "block_timestamp"),
         Index("ix_transactions_receiver_time", "receiver", "block_timestamp"),
@@ -46,10 +52,10 @@ class CaseTransaction(Base, UUIDPrimaryKeyMixin, TimestampMixin):
     __tablename__ = "case_transactions"
 
     case_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("cases.id", ondelete="CASCADE"), nullable=False
+        UUIDType, ForeignKey("cases.id", ondelete="CASCADE"), nullable=False
     )
     transaction_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("transactions.id", ondelete="CASCADE"), nullable=False
+        UUIDType, ForeignKey("transactions.id", ondelete="CASCADE"), nullable=False
     )
     hop_depth: Mapped[int] = mapped_column(Integer, nullable=False)
     direction: Mapped[str] = mapped_column(String(16), nullable=False)

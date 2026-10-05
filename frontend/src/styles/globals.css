@@ -2,18 +2,427 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: var(--font-family-sans);
-  background-color: var(--color-background);
-  color: var(--color-text-primary);
-  line-height: 1.5;
+/* ---------------------------------------------------------------- base ---- */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: var(--font-family-sans);
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    line-height: var(--line-height-normal);
+    font-size: var(--text-base);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /*
+   * Headings and numeric data use lining tabular figures so columns of values
+   * align without a per-component opt-in.
+   */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 600;
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.01em;
+  }
+
+  /* One consistent focus treatment for every interactive element. */
+  :focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  ::selection {
+    background-color: var(--color-accent-subtle);
+    color: var(--color-text-primary);
+  }
+
+  /* Long hashes and addresses must never widen a panel. */
+  .mono,
+  code,
+  kbd {
+    font-family: var(--font-family-mono);
+    font-variant-numeric: tabular-nums;
+  }
 }
 
-* {
-  box-sizing: border-box;
+/* ---------------------------------------------------------- components ---- */
+
+@layer components {
+  /* Focus ring kept as a class for compatibility with existing call sites. */
+  .focus-ring:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: var(--space-base);
+    top: var(--space-base);
+    z-index: 100;
+    transform: translateY(-200%);
+    padding: 0.625rem 1rem;
+    background-color: var(--color-surface);
+    color: var(--color-accent);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    transition: transform var(--duration-fast) var(--easing-standard);
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+
+  /* Panel: the single bordered surface used by every content block. */
+  .panel {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-panel);
+  }
+
+  .panel-body {
+    padding: 1.5rem;
+  }
+
+  .panel-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .panel-title {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  .panel-index {
+    font-family: var(--font-family-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    letter-spacing: 0.04em;
+  }
+
+  /* Section label used above grouped field sets. */
+  .eyebrow {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .field-label {
+    display: block;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin-bottom: 0.375rem;
+  }
+
+  .field-hint {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin-top: 0.375rem;
+  }
+
+  .field-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.375rem;
+    font-size: var(--text-sm);
+    color: var(--color-status-attention-fg);
+    margin-top: 0.375rem;
+  }
+
+  /*
+   * One control surface for inputs, selects and textareas. The select uses a
+   * background-image chevron because appearance-none removes the native one and
+   * would otherwise leave it with no affordance at all.
+   */
+  .control {
+    display: block;
+    width: 100%;
+    min-height: var(--control-min-height);
+    padding: 0.5rem 0.75rem;
+    font-size: var(--text-base);
+    font-family: inherit;
+    color: var(--color-text-primary);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    transition:
+      border-color var(--duration-fast) var(--easing-standard),
+      background-color var(--duration-fast) var(--easing-standard);
+  }
+
+  .control::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  .control:hover:not(:disabled) {
+    border-color: var(--color-text-muted);
+  }
+
+  .control:focus {
+    border-color: var(--color-accent);
+  }
+
+  .control:focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 1px;
+  }
+
+  .control:disabled {
+    background-color: var(--color-surface-subtle);
+    color: var(--color-text-muted);
+    cursor: not-allowed;
+  }
+
+  .control[aria-invalid='true'] {
+    border-color: var(--color-status-attention-border);
+    background-color: var(--color-status-attention-bg);
+  }
+
+  select.control {
+    appearance: none;
+    padding-right: 2.25rem;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7686' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.625rem center;
+    background-size: 1rem 1rem;
+    cursor: pointer;
+  }
+
+  /* Buttons. No icon-only primary actions anywhere in the product. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: var(--control-min-height);
+    padding: 0.5rem 1.125rem;
+    font-family: inherit;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    line-height: 1.2;
+    text-align: center;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition:
+      background-color var(--duration-fast) var(--easing-standard),
+      border-color var(--duration-fast) var(--easing-standard),
+      color var(--duration-fast) var(--easing-standard);
+  }
+
+  .btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  .btn-primary {
+    background-color: var(--color-accent);
+    color: var(--color-text-inverse);
+    border-color: var(--color-accent);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background-color: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+  }
+
+  .btn-primary:active:not(:disabled) {
+    background-color: var(--color-accent-active);
+    border-color: var(--color-accent-active);
+  }
+
+  .btn-secondary {
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+    border-color: var(--color-border-strong);
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    background-color: var(--color-surface-subtle);
+    border-color: var(--color-text-muted);
+  }
+
+  .btn-quiet {
+    background-color: transparent;
+    color: var(--color-accent);
+    border-color: transparent;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .btn-quiet:hover:not(:disabled) {
+    background-color: var(--color-accent-subtle);
+    color: var(--color-accent-hover);
+  }
+
+  /* Status badge. Colour is always paired with a text label, never the only cue. */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.1875rem 0.5rem;
+    font-size: var(--text-xs);
+    font-weight: 500;
+    line-height: 1.4;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    white-space: nowrap;
+  }
+
+  .badge-neutral {
+    background-color: var(--color-status-neutral-bg);
+    color: var(--color-status-neutral-fg);
+    border-color: var(--color-status-neutral-border);
+  }
+
+  .badge-attention {
+    background-color: var(--color-status-attention-bg);
+    color: var(--color-status-attention-fg);
+    border-color: var(--color-status-attention-border);
+  }
+
+  .badge-info {
+    background-color: var(--color-status-info-bg);
+    color: var(--color-status-info-fg);
+    border-color: var(--color-status-info-border);
+  }
+
+  /* Evidence tag. Text only by specification: no dot, no colour-only encoding. */
+  .evidence-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.0625rem 0.375rem;
+    font-family: var(--font-family-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.02em;
+    color: var(--color-text-muted);
+    background-color: var(--color-surface-subtle);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+    cursor: help;
+  }
+
+  /* Data table used for edges, provenance and audit history. */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+  }
+
+  .data-table caption {
+    caption-side: top;
+    text-align: left;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    padding-bottom: 0.5rem;
+  }
+
+  .data-table th {
+    text-align: left;
+    font-weight: 500;
+    font-size: var(--text-xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    padding: 0.5rem 0.75rem;
+    background-color: var(--color-surface-subtle);
+    border-bottom: 1px solid var(--color-border);
+    white-space: nowrap;
+  }
+
+  .data-table td {
+    padding: 0.625rem 0.75rem;
+    border-bottom: 1px solid var(--color-border-subtle);
+    color: var(--color-text-secondary);
+    vertical-align: top;
+  }
+
+  .data-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .data-table tbody tr:hover td {
+    background-color: var(--color-surface-subtle);
+  }
+
+  /* Scroll container for wide tables on small screens. */
+  .table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .hairline {
+    height: 1px;
+    background-color: var(--color-border-subtle);
+    border: 0;
+  }
+
+  .prose-block {
+    max-width: var(--max-width-prose);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-secondary);
+  }
+
+  /* Skeleton placeholder for loading panels. */
+  .skeleton {
+    background-color: var(--color-surface-subtle);
+    border-radius: var(--radius-sm);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-border-subtle);
+    opacity: 0.6;
+    animation: progress-sweep 1.6s var(--easing-standard) infinite;
+  }
 }
 
-.focus-ring:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
+/* ------------------------------------------------------ state overrides ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background-color: #ffffff;
+  }
 }

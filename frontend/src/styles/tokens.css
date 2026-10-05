@@ -1,47 +1,144 @@
+/*
+ * Design tokens for TRACE-X.
+ *
+ * Every colour is consumed by Tailwind through var() references declared in
+ * tailwind.config.ts, so a single override here repaints the whole interface in
+ * both the light and the dark theme. Hex values are kept verbatim from the
+ * project specification so contrast can be audited against the source document.
+ *
+ * Rule for contributors: add a token here, then reference it in
+ * tailwind.config.ts. Never inline a hex value in a component.
+ */
+
 :root {
+  color-scheme: light;
+
+  /* Surfaces */
   --color-background: #f7f8fa;
   --color-surface: #ffffff;
   --color-surface-subtle: #f1f3f6;
+  --color-surface-sunken: #eceff3;
+  --color-header: #ffffff;
+
+  /* Lines */
   --color-border: #d9dee5;
+  --color-border-subtle: #e6e9ee;
   --color-border-strong: #b8c0cc;
+
+  /* Type */
   --color-text-primary: #1b2430;
   --color-text-secondary: #4a5565;
   --color-text-muted: #6b7686;
+  --color-text-inverse: #ffffff;
+
+  /* Accent */
   --color-accent: #2f5d8a;
   --color-accent-hover: #264c72;
+  --color-accent-active: #1f3d5c;
   --color-accent-subtle: #e6eef6;
+  --color-accent-subtle-hover: #d8e5f0;
+  --color-accent-border: #b6cadd;
+
+  /* Status pairs. Deliberately no red or green: a status must never read as a
+     verdict. Errors reuse the attention pair. */
   --color-status-neutral-bg: #edeff3;
-  --color-status-neutral-text: #4a5565;
+  --color-status-neutral-fg: #4a5565;
+  --color-status-neutral-border: #d5dae1;
+
   --color-status-attention-bg: #f6efd9;
-  --color-status-attention-text: #7a5a12;
+  --color-status-attention-fg: #7a5a12;
+  --color-status-attention-border: #e3d3a4;
+
   --color-status-info-bg: #e6eef6;
-  --color-status-info-text: #2f5d8a;
-  --font-family-sans: 'Inter', 'IBM Plex Sans', system-ui, sans-serif;
-  --font-family-mono: 'IBM Plex Mono', 'JetBrains Mono', monospace;
+  --color-status-info-fg: #2f5d8a;
+  --color-status-info-border: #b6cadd;
+
+  --color-focus-ring: #2f5d8a;
+
+  /* Typography */
+  --font-family-sans: 'IBM Plex Sans', 'Inter', system-ui, -apple-system, 'Segoe UI',
+    sans-serif;
+  --font-family-mono: 'IBM Plex Mono', 'JetBrains Mono', ui-monospace, 'SFMono-Regular',
+    'Consolas', monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.4;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.65;
+
+  /* Shape */
   --radius-sm: 4px;
   --radius-md: 6px;
-  --space-base: 1rem;
-  --max-width-content: 960px;
+  --radius-full: 999px;
+
+  /* Rhythm */
+  --space-base: 0.25rem;
+  --panel-gap: 2rem;
+  --control-min-height: 2.5rem;
+
+  --max-width-content: 60rem;
+  --max-width-prose: 68ch;
+
+  /* Elevation. Institutional surfaces stay flat; these are for overlays only. */
+  --shadow-panel: 0 1px 2px rgba(27, 36, 48, 0.04);
+  --shadow-raised: 0 1px 3px rgba(27, 36, 48, 0.08), 0 1px 2px rgba(27, 36, 48, 0.04);
+  --shadow-overlay: 0 4px 16px rgba(27, 36, 48, 0.12);
+
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --easing-standard: cubic-bezier(0.2, 0, 0.2, 1);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
+    color-scheme: dark;
+
     --color-background: #0f1419;
-    --color-surface: #1a202c;
-    --color-surface-subtle: #242c3a;
-    --color-border: #3a4556;
-    --color-border-strong: #556176;
-    --color-text-primary: #f7fafc;
-    --color-text-secondary: #cbd5e0;
-    --color-text-muted: #a0aec0;
-    --color-accent: #63b3ed;
-    --color-accent-hover: #90cdf4;
-    --color-accent-subtle: #2d3748;
-    --color-status-neutral-bg: #2d3748;
-    --color-status-neutral-text: #cbd5e0;
-    --color-status-attention-bg: #744210;
-    --color-status-attention-text: #faf089;
-    --color-status-info-bg: #2c5282;
-    --color-status-info-text: #bee3f8;
+    --color-surface: #161d26;
+    --color-surface-subtle: #1d2531;
+    --color-surface-sunken: #111820;
+    --color-header: #161d26;
+
+    --color-border: #2f3945;
+    --color-border-subtle: #262f3a;
+    --color-border-strong: #4a5565;
+
+    --color-text-primary: #eef2f7;
+    --color-text-secondary: #b9c3d0;
+    --color-text-muted: #8e9aa9;
+    --color-text-inverse: #0f1419;
+
+    --color-accent: #8fb8dd;
+    --color-accent-hover: #aacbe8;
+    --color-accent-active: #c2dbf0;
+    --color-accent-subtle: #1b2836;
+    --color-accent-subtle-hover: #223142;
+    --color-accent-border: #38536d;
+
+    --color-status-neutral-bg: #232c38;
+    --color-status-neutral-fg: #b9c3d0;
+    --color-status-neutral-border: #35404e;
+
+    --color-status-attention-bg: #3a2f16;
+    --color-status-attention-fg: #e5c977;
+    --color-status-attention-border: #5a4a25;
+
+    --color-status-info-bg: #1b2836;
+    --color-status-info-fg: #a8c9e8;
+    --color-status-info-border: #38536d;
+
+    --color-focus-ring: #8fb8dd;
+
+    --shadow-panel: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-raised: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-overlay: 0 4px 16px rgba(0, 0, 0, 0.5);
   }
 }
